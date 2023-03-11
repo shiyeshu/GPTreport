@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>漏洞报告生成器</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #005293;
+      color: #fff;
+      padding: 10px;
+    }
+
+    h1 {
+      margin: 0;
+    }
+
+    form {
+      margin: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      margin-bottom: 20px;
+      font-size: 16px;
+    }
+
+    input[type="submit"] {
+      background-color: #005293;
+      color: #fff;
+      border: none;
+      padding: 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    #report {
+      margin: 20px;
+      border: 1px solid #ccc;
+      padding: 10px;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+  </style>
+
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/panda-syntax-dark.min.css">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"
+    integrity="sha512-bgHRAiTjGrzHzLyKOnpFvaEpGzJet3z4tZnXGjpsCcqOnAH6VGUx9frc5bcIhKTVLEiCO6vEhNAgx5jtLUYrfA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+  <script>hljs.initHighlightingOnLoad();</script>
+  <script src="https://cdn.jsdelivr.net/npm/js-base64@3.7.5/base64.min.js"></script>
+</head>
+
+<body>
+  <header>
+    <h1>漏洞报告生成器</h1>
+
+  </header>
+
+  <form method="POST" action="/">
+
+    <select name="language">
+      <option value="中文">中文</option>
+      <option value="英文">English</option>
+    </select>
+
+    <label>漏洞名称：</label>
+    <input type="text" name="vuln_name" placeholder="请输入漏洞名称">
+    <label>漏洞点：</label>
+    <input type="text" name="vuln_point" placeholder="请输入漏洞点">
+    <label>对报告的额外要求：</label>
+    <input type="text" name="beizhu" placeholder="报告额外要求">
+
+    <input type="submit" value="生成漏洞报告"> <button id="copy-btn" onclick="copyReport()" type="button">复制</button><!--<button id="copy-btn" onclick="saveReport()" type="button">生成文件</button>-->
+    本次执行耗时：{{ times }} 秒
+  </form>
+
+
+  {% if report %}
+
+  <pre id="report" style="white-space: pre-wrap;overflow-wrap: break-word;">
+        <code>
+      {{ report }}
+      </code>
+    </pre>
+
+
+  <br>
+
+  {% if report %}
+
+  {% endif %}
+
+  <script>
+    function copyReport() {
+      var reportText = document.querySelector("#report code").innerText;
+      navigator.clipboard.writeText(reportText)
+        .then(function () {
+          alert("漏洞报告已复制到剪贴板！");
+        })
+        .catch(function (error) {
+          alert("复制失败，请手动复制。");
+        });
+    }
+    //向/outfile发送post请求，内容是#report code的内容
+    // function saveReport() {
+    //   var reportText = document.querySelector("#report code").innerText;
+    //   var xhr = new XMLHttpRequest();
+    //   //将reportText进行base64编码,utf-8编码
+    //   reportText = Base64.encode(reportText, "utf-8");
+    //   xhr.open("POST", "/outfile", true);
+    //   xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    //   xhr.send("reportText=" + reportText);
+    //   alert("漏洞报告已保存到文件！");
+    // }
+  </script>
+
+  {% endif %}
+</body>
+
+</html>
