@@ -8,7 +8,7 @@ import time
 app = Flask(__name__, template_folder='templates', static_folder='static')
 
 # 设置 OpenAI API 密钥
-api_key = "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"
+api_key = ""
 
 # 设定 GPT-3 模型名称
 #model_engine = "gpt-3.5-turbo"
